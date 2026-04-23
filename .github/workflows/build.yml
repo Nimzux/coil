@@ -1,4 +1,4 @@
-name: Build Android Library
+name: Build Coil 3.4.0
 
 on:
   workflow_dispatch:
@@ -8,18 +8,26 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      - uses: actions/checkout@v4
+      - name: Checkout repository
+        uses: actions/checkout@v4
 
-      - uses: actions/setup-java@v4
+      - name: Set up JDK 21
+        uses: actions/setup-java@v4
         with:
-          distribution: temurin
-          java-version: 17
+          distribution: 'temurin'
+          java-version: '21'
 
-      - run: chmod +x gradlew
+      - name: Make Gradle wrapper executable
+        run: chmod +x ./gradlew
 
-      - run: ./gradlew assembleRelease
+      - name: Build all AARs (release)
+        run: ./gradlew assembleRelease
 
-      - uses: actions/upload-artifact@v4
+      - name: Upload artifacts
+        uses: actions/upload-artifact@v4
         with:
-          name: build
-          path: '**/build/outputs/'
+          name: coil-3.4.0-build
+          path: |
+            **/build/outputs/aar/
+            **/build/libs/
+
